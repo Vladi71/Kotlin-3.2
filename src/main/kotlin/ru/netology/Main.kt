@@ -16,9 +16,6 @@ fun main() {
             title = "Вторая заметка",
             text = "azaza",
     ))
-
-    // noteService.notePrint()
-
     noteService.addCommentNote(Comment(
             noteId = 1,
             commentId = 1,
@@ -45,6 +42,9 @@ fun main() {
     ))
 
     noteService.getNoteUser(1)
-    // noteService.getNote(1)
+    noteService.getNote(1)
+    noteService.delNote(1)
+    noteService.delComment(1)
+    noteService.recoverComment(2)
 
 }

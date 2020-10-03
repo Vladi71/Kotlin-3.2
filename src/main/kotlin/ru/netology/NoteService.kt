@@ -3,25 +3,32 @@ package ru.netology
 class NoteService {
 
     private var notes = mutableListOf<Note>()
+    private var deleteNotes = mutableListOf<Note>()
     private var currentId = 1
     private var comments = mutableListOf<Comment>()
+    private var deleteComments = mutableListOf<Comment>()
 
 
-    fun addNote(note: Note) {
+    fun addNote(note: Note): Boolean {
         notes.plusAssign(note.copy(id = currentId++))
         notes.last()
+        return true
 
     }
 
-    fun addCommentNote(comment: Comment) {
+    fun addCommentNote(comment: Comment): Boolean {
         notes.forEach { currentNote ->
             if (currentNote.id == comment.noteId) {
                 comments.plusAssign(comment)
                 currentNote.comments += comment
-
+                return true
+            } else {
+                println("Заметка не существует")
             }
         }
+        return false
     }
+
 
     fun getComments(noteId: Int): List<Comment> {
         notes.forEach { note: Note ->
@@ -74,6 +81,53 @@ class NoteService {
                 getNotes.plusAssign(note)
         }
         return getNotes
+    }
+
+    fun delNote(noteId: Int): Boolean {
+        if (noteId < 0 || noteId > notes.size) {
+            println("ID заметки не существует")
+            return false
+        }
+        for (note in notes) {
+            if (noteId == note.id) {
+                deleteNotes.add(note)
+                notes.remove(note)
+                println("Заметка удалена")
+                return true
+            }
+        }
+        return false
+    }
+
+    fun delComment(comId: Int): Boolean {
+        for (comment in comments)
+            if (comId != comment.commentId) {
+                println("ID комментария не существует")
+                return false
+            } else {
+                for (comment in comments) {
+                    if (comId == comment.commentId) {
+                        deleteComments.add(comment)
+                        comments.remove(comment)
+                        println("Комментарий удален")
+                        return true
+                    }
+                }
+            }
+        return false
+    }
+
+    fun recoverComment(comId: Int): Boolean {
+        for (comment in deleteComments) {
+            if (comId == comment.commentId) {
+                comments.add(comment)
+                deleteComments.remove(comment)
+                println("Комментарий восстановлен")
+                return true
+            }
+        }
+        println("ID комментария не существует")
+        return false
     }
 }
 
